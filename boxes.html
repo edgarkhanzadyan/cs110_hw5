@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edgar Canvas</title>
+  <style>
+  </style>
+</head>
+<body>
+  <canvas height="1000px" width="1000px" id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const NumberOfPoints = 1000;
+    const points = [];
+    for(let i = 0; i < NumberOfPoints; i++) {
+      const size = Math.random() * 150;
+      points.push({
+        height: size,
+        width: size,
+        x: Math.random()*(canvas.height-2*size),
+        y: Math.random()*(canvas.width-2*size),
+        xDir: Math.random()*5,
+        yDir: Math.random()*5,
+        color: `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+      })
+    }
+    const draw = function() {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      points.forEach(function(point) {
+        context.fillStyle = point.color;
+        context.fillRect(point.x, point.y, point.width, point.height);
+        point.x += point.xDir;
+        point.y += point.yDir;
+        const thresholdX = point.x + point.width;
+        const thresholdY = point.y + point.height;
+        if(thresholdX >= canvas.width || point.x <= 0) {
+          point.xDir *= -1;
+        }
+        if(thresholdY >= canvas.height || point.y <= 0) {
+          point.yDir *= -1;
+        }
+      });
+    };
+    const animate = function() {
+      draw()
+      setTimeout(animate, 1);
+    }
+    animate();
+  </script>
+</body>
+</html>
